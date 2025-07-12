@@ -4,10 +4,14 @@
   "private": true,
   "type": "module",
   "packageManager": "pnpm@8.11.0",
+    "repository": {
+    "type": "git",
+    "url": "https://github.com/tonadevsantos/pretty-params"
+  },
   "scripts": {
     "prepare": "husky install",
     "dev": "vite build --watch --mode development",
-    "dev:chrome": "cross-env BROWSER=chrome npm run dev" ,
+    "dev:chrome": "cross-env BROWSER=chrome npm run dev",
     "dev:firefox": "cross-env BROWSER=firefox npm run dev",
     "build": "vite build",
     "build:chrome": "cross-env BROWSER=chrome vite build --mode production && web-ext build -s dist/chrome -a dist/ext/chrome",
@@ -23,6 +27,7 @@
     "@radix-ui/react-slot": "^1.1.1",
     "@types/firefox-webext-browser": "^120.0.4",
     "@wxt-dev/browser": "^0.0.318",
+    "beachball": "^2.54.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.473.0",
