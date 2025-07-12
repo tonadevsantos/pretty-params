@@ -1,9 +1,5 @@
-export function visitChromeURL(url: string) {
-  chrome.tabs.update({ url });
-}
+import { browser } from "@wxt-dev/browser";
 
 export function visitURL(url: string) {
-  if (typeof chrome === "object") {
-    return visitChromeURL(url);
-  }
+  browser.tabs.update({ url });
 }
