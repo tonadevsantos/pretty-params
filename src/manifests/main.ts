@@ -49,7 +49,7 @@ export function createFirefoxManifest(env: string): Plugin {
     name: env === "production" ? Manifest.name : `${Manifest.name} (dev)`,
     action: {
       ...Manifest.action,
-      default_icon: "icon-dev.png",
+      default_icon: env === "production" ? "icon.png" : "icon-dev.png",
     },
   };
 
@@ -82,7 +82,7 @@ export function createChromeManifest(env: string): Plugin {
     name: env === "production" ? Manifest.name : `${Manifest.name} (dev)`,
     action: {
       ...Manifest.action,
-      default_icon: "icon-dev.png",
+      default_icon: env === "production" ? "icon.png" : "icon-dev.png",
     },
   };
 
