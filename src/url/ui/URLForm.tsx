@@ -97,6 +97,13 @@ export function URLForm(props: URLFormProps) {
       newURL.searchParams.set(name, value);
     });
 
+    const newFieldName = newField?.name.trim();
+    const newFieldValue = newField?.value.trim();
+    if (newFieldName && newFieldValue) {
+      newURL.searchParams.set(newFieldName, newFieldValue);
+    }
+
+    onCreateField();
     visitURL(newURL.href);
   }
 
@@ -129,11 +136,11 @@ export function URLForm(props: URLFormProps) {
     placeholder: "Set query string value or do it later",
   };
 
-  const createButtonText = newField?.name
-    ? `Create "${newField.name}" field`
-    : "Create field";
+  const createButtonText = "Create field";
 
   const disableCreateButton = newField?.name.trim() === "";
+
+  const createButtonVariant = newField?.name ? "default" : "secondary";
 
   const inputLabelSize =
     "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70";
@@ -245,12 +252,12 @@ export function URLForm(props: URLFormProps) {
               <FormControl>
                 <Input {...inputValueProps} />
               </FormControl>
-              <div className="flex absolute right-0">
+              <div className="flex absolute right-0 gap-1">
                 <Button variant="destructive" onClick={onCancelCreation}>
                   Cancel
                 </Button>
                 <Button
-                  variant="ghost"
+                  variant={createButtonVariant}
                   disabled={disableCreateButton}
                   onClick={onCreateField}
                 >
