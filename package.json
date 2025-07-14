@@ -16,10 +16,7 @@
     "build:chrome": "cross-env BROWSER=chrome vite build --mode production && web-ext build -s dist/chrome -a dist/ext/chrome",
     "build:firefox": "cross-env BROWSER=firefox vite build --mode production && web-ext build -s dist/firefox -a dist/ext/firefox",
     "style": "prettier --check \"src/**/*.{ts,tsx}\"",
-    "style:fix": "prettier --write \"src/**/*.{ts,tsx}\"",
-    "change": "beachball change",
-    "checkchange": "beachball check",
-    "release": "beachball publish"
+    "style:fix": "prettier --write \"src/**/*.{ts,tsx}\""
   },
   "author": "Tona González <hi@tona.dev>",
   "license": "MIT",
@@ -29,7 +26,6 @@
     "@radix-ui/react-slot": "^1.1.1",
     "@types/firefox-webext-browser": "^120.0.4",
     "@wxt-dev/browser": "^0.0.318",
-    "beachball": "^2.54.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.473.0",
