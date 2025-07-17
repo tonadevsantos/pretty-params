@@ -10,6 +10,12 @@ import { listURLSearchParams } from "../domain/URL";
 import { useFieldArray, useForm } from "react-hook-form";
 import { Input, type InputProps } from "@/core/ui/input";
 import { Button } from "@/core/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/core/ui/tooltip";
 import { Trash2, PlusCircle, Edit, Copy } from "lucide-react";
 import { visitURL } from "@/url/use-cases/visit-url";
 
@@ -146,135 +152,151 @@ export function URLForm(props: URLFormProps) {
     "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70";
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} onKeyDown={onKeydownSubmit}>
-        <div
-          ref={formContainerRef}
-          className={`${SIZES.height.form} overflow-auto mb-4 pr-4`}
+    <TooltipProvider delayDuration={300}>
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          onKeyDown={onKeydownSubmit}
         >
-          {fields.map((field, index) => (
-            <FormField
-              key={field.id}
-              name={`params.${index}.value`}
-              render={() => {
-                const isEditing = checkIsEditing(index);
-                const label = form.getValues(`params.${index}.name`);
-                const value = form.getValues(`params.${index}.value`);
+          <div
+            ref={formContainerRef}
+            className={`${SIZES.height.form} overflow-auto mb-4 pr-4`}
+          >
+            {fields.map((field, index) => (
+              <FormField
+                key={field.id}
+                name={`params.${index}.value`}
+                render={() => {
+                  const isEditing = checkIsEditing(index);
+                  const label = form.getValues(`params.${index}.name`);
+                  const value = form.getValues(`params.${index}.value`);
 
-                const handleCopyClick = () => {
-                  navigator.clipboard.writeText(value);
-                };
+                  const handleCopyClick = () => {
+                    navigator.clipboard.writeText(value);
+                  };
 
-                return (
-                  <FormItem className="mt-2 group">
-                    <div className="flex items-center gap-3">
-                      {isEditing ? (
+                  return (
+                    <FormItem className="mt-2 group">
+                      <div className="flex items-center gap-3">
+                        {isEditing ? (
+                          <FormControl>
+                            <Input
+                              className={inputLabelSize}
+                              {...form.register(`params.${index}.name`)}
+                            />
+                          </FormControl>
+                        ) : (
+                          <FormLabel>{label}</FormLabel>
+                        )}
+                      </div>
+                      <div className="relative group">
                         <FormControl>
                           <Input
-                            className={inputLabelSize}
-                            {...form.register(`params.${index}.name`)}
+                            className="peer focus-visible:pr-0 peer/copy-focus:pr-9 pr-9"
+                            {...form.register(`params.${index}.value`)}
                           />
                         </FormControl>
-                      ) : (
-                        <FormLabel>{label}</FormLabel>
-                      )}
-                    </div>
-                    <div className="relative group">
-                      <FormControl>
-                        <Input
-                          className="peer focus-visible:pr-0 peer/copy-focus:pr-9 pr-9"
-                          {...form.register(`params.${index}.value`)}
-                        />
-                      </FormControl>
-                      <Button
-                        type="button"
-                        size="icon"
-                        className="peer/copy absolute right-0 top-1/2 -translate-y-1/2  peer-focus:opacity-0 opacity-100 transition-opacity duration-200"
-                        variant="link"
-                        onClick={handleCopyClick}
-                      >
-                        <Copy className="bg-background" />
-                      </Button>
-                    </div>
-                    <div className="flex justify-end gap-1 transition-opacity">
-                      {isEditing ? (
-                        <>
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            onClick={() => cancelEdit(index)}
-                          >
-                            Cancel Edit
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant="default"
-                            type="button"
-                            onClick={() => onUpdateField(index)}
-                          >
-                            Save
-                          </Button>
-                        </>
-                      ) : (
-                        <>
-                          <Button
-                            size="sm"
-                            variant="ghost-destructive"
-                            type="button"
-                            onClick={() => remove(index)}
-                          >
-                            <Trash2 />
-                            Delete
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            type="button"
-                            onClick={() => setEditMode(index)}
-                          >
-                            <Edit />
-                            Edit
-                          </Button>
-                        </>
-                      )}
-                    </div>
-                  </FormItem>
-                );
-              }}
-            />
-          ))}
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button
+                              type="button"
+                              size="icon"
+                              className="peer/copy absolute right-0 top-1/2 -translate-y-1/2  peer-focus:opacity-0 opacity-100 transition-opacity duration-200"
+                              variant="link"
+                              onClick={handleCopyClick}
+                            >
+                              <Copy className="bg-background" />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Copy</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </div>
+                      <div className="flex justify-end gap-1 transition-opacity">
+                        {isEditing ? (
+                          <>
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              onClick={() => cancelEdit(index)}
+                            >
+                              Cancel Edit
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="default"
+                              type="button"
+                              onClick={() => onUpdateField(index)}
+                            >
+                              Save
+                            </Button>
+                          </>
+                        ) : (
+                          <>
+                            <Button
+                              size="sm"
+                              variant="ghost-destructive"
+                              type="button"
+                              onClick={() => remove(index)}
+                            >
+                              <Trash2 />
+                              Delete
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              type="button"
+                              onClick={() => setEditMode(index)}
+                            >
+                              <Edit />
+                              Edit
+                            </Button>
+                          </>
+                        )}
+                      </div>
+                    </FormItem>
+                  );
+                }}
+              />
+            ))}
 
-          {newField ? (
-            <FormItem className="mt-1 relative h-32">
-              <FormControl>
-                <Input className={inputLabelSize} {...inputNameProps} />
-              </FormControl>
-              <FormControl>
-                <Input {...inputValueProps} />
-              </FormControl>
-              <div className="flex absolute right-0 gap-1">
-                <Button variant="destructive" onClick={onCancelCreation}>
-                  Cancel
-                </Button>
-                <Button
-                  variant={createButtonVariant}
-                  disabled={disableCreateButton}
-                  onClick={onCreateField}
-                >
-                  {createButtonText}
-                </Button>
-              </div>
-            </FormItem>
-          ) : null}
-        </div>
-        <div className="flex gap-2">
-          <Button type="submit">Visit URL</Button>
-          <Button type="button" variant="secondary" onClick={onShowCreateField}>
-            <PlusCircle size={16} />
-            New Field
-          </Button>
-        </div>
-      </form>
-    </Form>
+            {newField ? (
+              <FormItem className="mt-1 relative h-32">
+                <FormControl>
+                  <Input className={inputLabelSize} {...inputNameProps} />
+                </FormControl>
+                <FormControl>
+                  <Input {...inputValueProps} />
+                </FormControl>
+                <div className="flex absolute right-0 gap-1">
+                  <Button variant="destructive" onClick={onCancelCreation}>
+                    Cancel
+                  </Button>
+                  <Button
+                    variant={createButtonVariant}
+                    disabled={disableCreateButton}
+                    onClick={onCreateField}
+                  >
+                    {createButtonText}
+                  </Button>
+                </div>
+              </FormItem>
+            ) : null}
+          </div>
+          <div className="flex gap-2">
+            <Button type="submit">Visit URL</Button>
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={onShowCreateField}
+            >
+              <PlusCircle size={16} />
+              New Field
+            </Button>
+          </div>
+        </form>
+      </Form>
+    </TooltipProvider>
   );
 }
