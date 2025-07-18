@@ -1,6 +1,6 @@
 {
   "name": "pretty-params",
-  "version": "0.5.1",
+  "version": "0.5.3",
   "private": true,
   "type": "module",
   "repository": {
@@ -24,6 +24,7 @@
     "@hookform/resolvers": "^3.10.0",
     "@radix-ui/react-label": "^2.1.1",
     "@radix-ui/react-slot": "^1.1.1",
+    "@radix-ui/react-tooltip": "^1.2.7",
     "@types/firefox-webext-browser": "^120.0.4",
     "@wxt-dev/browser": "^0.0.318",
     "class-variance-authority": "^0.7.1",
