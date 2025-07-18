@@ -18,6 +18,7 @@ import {
 } from "@/core/ui/tooltip";
 import { Trash2, PlusCircle, Edit, Copy } from "lucide-react";
 import { visitURL } from "@/url/use-cases/visit-url";
+import { usePersistTooltip } from "@/core/ui/hooks/use-persist-tooltip";
 
 // Props is url as URL
 export interface URLFormProps {
@@ -50,6 +51,9 @@ export function URLForm(props: URLFormProps) {
   } | null>(null);
 
   const [editModes, setEditModes] = useState<Set<number>>(new Set());
+  const [copiedFields, setCopiedFields] = useState<Set<string>>(new Set());
+
+  const tooltip = usePersistTooltip(300);
 
   function setEditMode(index: number) {
     setEditModes((prev) => {
@@ -152,7 +156,7 @@ export function URLForm(props: URLFormProps) {
     "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70";
 
   return (
-    <TooltipProvider delayDuration={300}>
+    <TooltipProvider>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -171,8 +175,23 @@ export function URLForm(props: URLFormProps) {
                   const label = form.getValues(`params.${index}.name`);
                   const value = form.getValues(`params.${index}.value`);
 
+                  const tooltipId = `copy-${index}`;
+                  const triggerProps = tooltip.makeProps(tooltipId);
+                  const isCopied = copiedFields.has(tooltipId);
+
+                  tooltip.afterClose(tooltipId, () =>
+                    setTimeout(() => {
+                      setCopiedFields((prev) => {
+                        const next = new Set(prev);
+                        next.delete(tooltipId);
+                        return next;
+                      });
+                    }, 400),
+                  );
+
                   const handleCopyClick = () => {
                     navigator.clipboard.writeText(value);
+                    setCopiedFields((prev) => new Set([...prev, tooltipId]));
                   };
 
                   return (
@@ -196,7 +215,7 @@ export function URLForm(props: URLFormProps) {
                             {...form.register(`params.${index}.value`)}
                           />
                         </FormControl>
-                        <Tooltip>
+                        <Tooltip open={tooltip.checkOpen(tooltipId)}>
                           <TooltipTrigger asChild>
                             <Button
                               type="button"
@@ -204,12 +223,13 @@ export function URLForm(props: URLFormProps) {
                               className="peer/copy absolute right-0 top-1/2 -translate-y-1/2  peer-focus:opacity-0 opacity-100 transition-opacity duration-200"
                               variant="link"
                               onClick={handleCopyClick}
+                              {...triggerProps}
                             >
                               <Copy className="bg-background" />
                             </Button>
                           </TooltipTrigger>
                           <TooltipContent>
-                            <p>Copy</p>
+                            <p>{isCopied ? "Copied!" : "Copy"}</p>
                           </TooltipContent>
                         </Tooltip>
                       </div>
