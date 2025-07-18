@@ -40,5 +40,13 @@ npm run build:chrome
 npm run build:firefox
 ```
 
+## Testing it in a website
 
+You can visit the product page at [tona.dev/pretty-params](https://tona.dev/projects/pretty-params)
 
+- Click the "Start Demo" button,
+- Open the extension.
+- Change the color parameter to "pink",
+- Click on Visit URL.
+- The color of the text in the demo should change.
+- Change any of the other values or remove them as wished.
