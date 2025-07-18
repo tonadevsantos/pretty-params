@@ -7,6 +7,6 @@ export function listURLSearchParams(url: URL) {
     ([name, value]) => ({
       name,
       value,
-    })
+    }),
   );
 }
